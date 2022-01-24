@@ -2,9 +2,12 @@ const http = require('http');
 const fs = require('fs');
 
 function getSuccess(res, fname) {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end(fname);
+  fs.readFile(fname, (err, data) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/html');
+    res.write(data);
+    return res.end();
+  });
 }
 
 const server = http.createServer((req, res) => {
@@ -21,4 +24,4 @@ const server = http.createServer((req, res) => {
 
 server.listen(8080, () => {
   console.log(`Server running at http://localhost:8080/`);
-})
+});
