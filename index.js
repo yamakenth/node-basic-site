@@ -1,27 +1,23 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
+const app = express();
+const port = 8080;
 
-function getSuccess(res, fname) {
-  fs.readFile(fname, (err, data) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/html');
-    res.write(data);
-    return res.end();
-  });
-}
-
-const server = http.createServer((req, res) => {
-  if (req.url === '/') {
-    getSuccess(res, 'index.html');
-  } else if (req.url === '/about') {
-    getSuccess(res, 'about.html');
-  } else if (req.url === '/contact-me') {
-    getSuccess(res, 'contact-me.html');
-  } else {
-    getSuccess(res, '404.html');
-  }
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html')
 });
 
-server.listen(8080, () => {
-  console.log(`Server running at http://localhost:8080/`);
+app.get('/about', (req, res) => {
+  res.sendFile(__dirname + '/about.html')
+});
+
+app.get('/contact-me', (req, res) => {
+  res.sendFile(__dirname + '/contact-me.html')
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(__dirname + '/404.html')
+});
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`)
 });
